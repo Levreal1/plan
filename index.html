@@ -148,6 +148,56 @@
     background: var(--gold);
     margin: 0 0 22px;
   }
+  .ask {
+    margin: 44px 28px 0;
+    opacity: 0;
+    animation: fade 1.2s ease-out 2s forwards;
+  }
+  .ask h2 {
+    font-size: 20px;
+    font-weight: normal;
+    font-style: italic;
+    margin: 0 0 18px;
+    line-height: 1.35;
+  }
+  .opts { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+    text-align: left;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 13px 16px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, opacity .3s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .opt:active { transform: scale(0.985); }
+  .opt.is-picked { border-color: var(--gold); background: rgba(183,132,42,.10); }
+  .opts.has-pick .opt:not(.is-picked) { opacity: .4; }
+  .reply {
+    margin: 22px 0 0;
+    padding-left: 16px;
+    border-left: 1px solid var(--gold);
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .send {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: var(--gold);
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 15px;
+    letter-spacing: .04em;
+  }
+  .send-hint { font-size: 13px; color: var(--ink-soft); margin: 10px 0 0; }
   @media (min-width: 560px) {
     .photo { padding-top: 40px; }
     .song-title { font-size: 24px; }
@@ -184,6 +234,22 @@
     <p>Akorát jsem šel moc rychle tím směrem.</p>
     <p>Pokud už se touhle cestou nechceš pokusit jít a nejsi zvědavá, jak jsem ji viděl já, je to v pořádku. Nechám tě jít.</p>
     <p class="sign">M.</p>
+  </section>
+
+  <section class="ask" id="ask">
+    <h2>Půjdeš se ještě jednou sejít?</h2>
+    <div class="opts" id="opts">
+      <button class="opt" data-reply="Platí. Tempo je tvoje.">Ano. Ale tempo tentokrát určuju já.</button>
+      <button class="opt" data-reply="Káva stačí. Plány nechám doma.">Ano, na jednu kávu. Bez velkých plánů.</button>
+      <button class="opt" data-reply="Šuplík je hlubší, než vypadá.">Možná. Záleží, kolik písniček ještě máš v šuplíku.</button>
+      <button class="opt" data-reply="Díky. Ta byla pro tebe.">Ne, ale písnička se povedla.</button>
+      <button class="opt" data-reply="Rozumím. Děkuju, že jsi to dočetla.">Ne. A tentokrát to opravdu nech být.</button>
+    </div>
+    <div id="after" hidden>
+      <p class="reply" id="reply"></p>
+      <a class="send" id="send" href="#">Poslat odpověď</a>
+      <p class="send-hint">Otevře se zpráva s tvou odpovědí, stačí odeslat.</p>
+    </div>
   </section>
 </main>
 
@@ -234,6 +300,38 @@
   }
   bar.addEventListener('click', seek);
   bar.addEventListener('touchstart', function (e) { seek(e); }, { passive: true });
+
+  // --- anketa ---
+  var CONTACT = { sms: '', mail: 'martin.malek@tenderhouse.cz' }; // doplnit telefon, např. '+420777123456'
+  var opts = document.getElementById('opts');
+  var after = document.getElementById('after');
+  var reply = document.getElementById('reply');
+  var send = document.getElementById('send');
+
+  function pick(btn) {
+    var all = opts.querySelectorAll('.opt');
+    for (var i = 0; i < all.length; i++) all[i].classList.remove('is-picked');
+    btn.classList.add('is-picked');
+    opts.classList.add('has-pick');
+    reply.textContent = btn.getAttribute('data-reply');
+    var body = 'Odpověď: ' + btn.textContent.trim();
+    send.href = CONTACT.sms
+      ? 'sms:' + CONTACT.sms + (/iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?') + 'body=' + encodeURIComponent(body)
+      : 'mailto:' + CONTACT.mail + '?subject=' + encodeURIComponent('Odpověď') + '&body=' + encodeURIComponent(body);
+    after.hidden = false;
+    try { localStorage.setItem('pick', btn.textContent.trim()); } catch (e) {}
+  }
+  opts.addEventListener('click', function (e) {
+    var b = e.target.closest('.opt');
+    if (b) pick(b);
+  });
+  try {
+    var saved = localStorage.getItem('pick');
+    if (saved) {
+      var all2 = opts.querySelectorAll('.opt');
+      for (var j = 0; j < all2.length; j++) if (all2[j].textContent.trim() === saved) pick(all2[j]);
+    }
+  } catch (e) {}
 })();
 </script>
 </body>
