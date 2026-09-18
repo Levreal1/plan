@@ -406,12 +406,13 @@
   bar.addEventListener('touchstart', function (e) { seek(e); }, { passive: true });
 
   // mini přehrávač: ukázat, když hlavní přehrávač zmizí z obrazovky
-  var mini = $('mini');
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) {
-      mini.classList.toggle('is-shown', !es[0].isIntersecting);
-    }, { threshold: 0 }).observe(document.querySelector('.player'));
+  var mini = $('mini'), playerEl = document.querySelector('.player');
+  function checkMini() {
+    var r = playerEl.getBoundingClientRect();
+    mini.classList.toggle('is-shown', r.bottom < 0);
   }
+  window.addEventListener('scroll', checkMini, { passive: true });
+  checkMini();
 
   // karty: tečky
   var deck = $('deck'), dots = $('dots');
