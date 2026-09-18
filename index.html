@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#e6dcc8">
+<title>Pro tebe</title>
+<style>
+  :root {
+    --bg: #e6dcc8;
+    --bg-deep: #d9cdb5;
+    --ink: #3a2e26;
+    --ink-soft: #6f6052;
+    --gold: #b7842a;
+    --gold-soft: #d3a64f;
+    --line: rgba(58, 46, 38, 0.18);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", "Iowan Old Style", serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0 0 48px;
+  }
+  .photo {
+    position: relative;
+    margin: 0;
+    padding: 16px 16px 0;
+  }
+  .photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 18px 40px -18px rgba(40, 28, 18, 0.55);
+    opacity: 0;
+    transform: translateY(8px);
+    animation: rise 1.4s ease-out 0.15s forwards;
+  }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  .player {
+    margin: 28px 24px 0;
+    opacity: 0;
+    animation: fade 1.2s ease-out 0.9s forwards;
+  }
+  @keyframes fade { to { opacity: 1; } }
+  .song-head {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .play {
+    flex: 0 0 auto;
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    display: grid; place-items: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background .25s, color .25s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .play:active { transform: scale(0.96); }
+  .play.is-playing { background: var(--gold); color: var(--bg); }
+  .play svg { width: 24px; height: 24px; }
+  .play .ico-pause { display: none; }
+  .play.is-playing .ico-play { display: none; }
+  .play.is-playing .ico-pause { display: block; }
+  .song-meta { min-width: 0; }
+  .song-kicker {
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 4px;
+  }
+  .song-title {
+    font-size: 22px;
+    font-style: italic;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .bar {
+    margin-top: 18px;
+    height: 28px;
+    display: flex; align-items: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .track {
+    position: relative;
+    width: 100%; height: 2px;
+    background: var(--line);
+  }
+  .fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: var(--gold);
+  }
+  .knob {
+    position: absolute; top: 50%; left: 0%;
+    width: 10px; height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .bar.is-active .knob { opacity: 1; }
+  .times {
+    display: flex; justify-content: space-between;
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    margin-top: 2px;
+  }
+
+  .note {
+    margin: 40px 28px 0;
+    font-size: 18px;
+    line-height: 1.65;
+    opacity: 0;
+    animation: fade 1.2s ease-out 1.5s forwards;
+  }
+  .note p { margin: 0 0 1em; }
+  .note .sign {
+    margin-top: 1.6em;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+  .rule {
+    width: 36px; height: 1px;
+    background: var(--gold);
+    margin: 0 0 22px;
+  }
+  @media (min-width: 560px) {
+    .photo { padding-top: 40px; }
+    .song-title { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <figure class="photo">
+    <img src="media/photo.jpg" alt="" width="1600" height="1606">
+  </figure>
+
+  <section class="player" aria-label="Písnička">
+    <div class="song-head">
+      <button class="play" id="play" aria-label="Přehrát">
+        <svg class="ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+        <svg class="ico-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>
+      </button>
+      <div class="song-meta">
+        <p class="song-kicker">Písnička pro tebe</p>
+        <h1 class="song-title">Jedná se o plán</h1>
+      </div>
+    </div>
+    <div class="bar" id="bar">
+      <div class="track"><div class="fill" id="fill"></div><div class="knob" id="knob"></div></div>
+    </div>
+    <div class="times"><span id="cur">0:00</span><span id="dur">–:––</span></div>
+    <audio id="audio" preload="metadata" src="media/song.mp3"></audio>
+  </section>
+
+  <section class="note">
+    <div class="rule"></div>
+    <!-- TEXT VZKAZU: upravit před nasazením -->
+    <p>Já jen tak věci nevzdávám, když v nich vidím potenciál.</p>
+    <p>Ale tohle už je naposledy. Pak tě nechám jít.</p>
+    <p class="sign">M.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var audio = document.getElementById('audio');
+  var btn = document.getElementById('play');
+  var bar = document.getElementById('bar');
+  var fill = document.getElementById('fill');
+  var knob = document.getElementById('knob');
+  var cur = document.getElementById('cur');
+  var dur = document.getElementById('dur');
+
+  function fmt(s) {
+    if (!isFinite(s)) return '–:––';
+    s = Math.floor(s);
+    return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+  }
+  function setProgress(p) {
+    p = Math.max(0, Math.min(1, p));
+    fill.style.width = (p * 100) + '%';
+    knob.style.left = (p * 100) + '%';
+  }
+
+  btn.addEventListener('click', function () {
+    if (audio.paused) { audio.play(); } else { audio.pause(); }
+  });
+  audio.addEventListener('play', function () {
+    btn.classList.add('is-playing'); bar.classList.add('is-active');
+    btn.setAttribute('aria-label', 'Pozastavit');
+  });
+  audio.addEventListener('pause', function () {
+    btn.classList.remove('is-playing');
+    btn.setAttribute('aria-label', 'Přehrát');
+  });
+  audio.addEventListener('ended', function () { setProgress(0); audio.currentTime = 0; });
+  audio.addEventListener('loadedmetadata', function () { dur.textContent = fmt(audio.duration); });
+  audio.addEventListener('timeupdate', function () {
+    cur.textContent = fmt(audio.currentTime);
+    if (audio.duration) setProgress(audio.currentTime / audio.duration);
+  });
+
+  function seek(evt) {
+    var r = bar.getBoundingClientRect();
+    var x = (evt.touches ? evt.touches[0].clientX : evt.clientX) - r.left;
+    var p = x / r.width;
+    if (audio.duration) { audio.currentTime = p * audio.duration; setProgress(p); }
+  }
+  bar.addEventListener('click', seek);
+  bar.addEventListener('touchstart', function (e) { seek(e); }, { passive: true });
+})();
+</script>
+</body>
+</html>
