@@ -206,7 +206,7 @@
       <div class="track"><div class="fill" id="fill"></div><div class="knob" id="knob"></div></div>
     </div>
     <div class="times"><span id="cur">0:00</span><span id="dur">–:––</span></div>
-    <audio id="audio" preload="metadata" src="media/song.mp3?v=2"></audio>
+    <audio id="audio" preload="metadata" src="media/song.mp3?v=3"></audio>
   </section>
 
   <section class="note fade">
@@ -258,7 +258,7 @@
 
   <section class="lyrics fade" aria-label="Text písničky">
     <p class="kicker">Text</p>
-    <h2 class="h2">Ještě mě neznáš</h2>
+    <h2 class="h2">Jednu chvíli navíc</h2>
     <div class="lyrics-box" id="lyrics"></div>
     <p class="lyrics-hint">Řádky se rozsvěcí, jak písnička hraje.</p>
   </section>
@@ -298,7 +298,7 @@
       <svg class="ico-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>
     </button>
     <div class="mini-meta">
-      <div class="mini-title">Ještě mě neznáš</div>
+      <div class="mini-title">Jednu chvíli navíc</div>
       <div class="track"><div class="fill" id="fill2"></div></div>
     </div>
   </div>
@@ -318,40 +318,52 @@
 
   // Text písničky: [čas v sekundách, řádek, volitelně třídy: 'gap' = mezera před řádkem]
   var LYRICS = [
-    [12.0, 'Kamilo, holčičko, podívej,'],
-    [15.5, 'hned na startu jsem trochu šlápl na plyn.'],
-    [19.0, 'Místo abych nechal věci běžet,'],
-    [22.5, 'chtěl jsem vědět moc brzo, kam to vlastně míří.'],
-    [26.0, 'Tak jo, moje chyba, už to chápu,', 'gap'],
-    [29.5, 'nemusel jsem z toho dělat vědu.'],
-    [33.0, 'Ten tlak není můj běžnej režim,'],
-    [36.5, 'jen jsem na chvíli předběhl děj.'],
-    [42.0, 'Pojďme se ještě jednou vidět,', 'gap'],
-    [46.0, 'bez plánů a bez velkejch slov.'],
-    [50.0, 'Nemusíme vědět, co z nás bude,'],
-    [54.0, 'prostě zjistit, jestli nám je spolu dobře.'],
-    [60.0, 'Procestovat spolu kus světa,', 'gap'],
-    [63.7, 'vytvářet chvíle, na který se nezapomíná.'],
-    [67.4, 'Nemusíme nic pojmenovávat,'],
-    [71.1, 'stačí si užívat to, co nám funguje.'],
-    [75.0, 'Chci se o tebe starat a rozmazlovat tě,', 'gap'],
-    [78.7, 'ale nechat tě pořád být sama sebou.'],
-    [82.4, 'A podle té poslední noci'],
-    [86.1, 'jsme si rozuměli i beze slov.'],
-    [92.0, 'A jestli porno je tvůj svět,', 'gap'],
-    [96.0, 'tak naše noc měla lepší scénář.'],
-    [102.0, 'Ruka u krku, prsty ve vlasech,', 'gap'],
-    [105.7, 'ten pohled, co už nepotřebuje překlad.'],
-    [109.4, 'A z tvýho hlasu poznat,'],
-    [113.1, 'že přesně takhle to chceš.'],
-    [117.0, 'Trojky, čtyřky, klidně přidej další,', 'gap'],
-    [120.7, 'jestli je to hra, tak hraju naplno.'],
-    [124.4, 'Zvládnu všechny, který pustíš mezi nás,'],
-    [128.1, 'ale stejně budu pořád tvůj.'],
-    [134.0, 'Pojďme se ještě jednou vidět,', 'gap'],
-    [138.0, 'ne slib, ne plán, jen další chvíli.'],
-    [142.0, 'Jestli ti se mnou bylo dobře,'],
-    [146.0, 'byla by škoda nechat to zmizet.']
+    [10.0, 'Kamilo, holčičko, promiň, já vím,'],
+    [13.6, 'hned na startu jsem šlápl na plyn.'],
+    [17.2, 'Místo nechat to jít jen tak, po svým,'],
+    [20.8, 'chtěl jsem moc brzo vědět, co je za tím.'],
+    [26.9, 'Tak jo, moje chyba, uznávám,', 'gap'],
+    [30.6, 'nemusel jsem z toho dělat vědu.'],
+    [34.2, 'Ten tlak, to fakt není režim, co znám,'],
+    [37.8, 'jen jsem trochu předběhl, kam s tebou jedu.'],
+    [43.9, 'Pojďme se ještě jednou sejít,', 'gap'],
+    [47.5, 'bez plánů a bez velkejch vět.'],
+    [51.1, 'Nemusíme vědět, co z nás má být,'],
+    [54.7, 'jen jestli je nám dobře teď, ne za pět let.'],
+    [60.8, 'Procestovat spolu kus světa,', 'gap'],
+    [64.4, 'zažít chvíle, co v nás zůstanou léta.'],
+    [68.1, 'Nemusíme to nijak pojmenovávat,'],
+    [71.7, 'stačí to, co nám funguje, si užívat.'],
+    [77.8, 'Chci se o tebe starat a hýčkat,', 'gap'],
+    [81.4, 'ale nechat tě pořád být sama sebou.'],
+    [85.0, 'Ta poslední noc nemusela nic říkat,'],
+    [88.6, 'rozuměli jsme si beze slov, já s tebou.'],
+    [94.7, 'A jestli porno je tvůj svět, tak lhář', 'gap'],
+    [98.3, 'je každej film, co má prej lepší scénář.'],
+    [104.4, 'Ruka u krku, prsty ve vlasech,', 'gap'],
+    [108.0, 'ten pohled beze slov mi bere dech.'],
+    [111.7, 'A z tvýho hlasu poznat, že to chceš,'],
+    [115.3, 'přesně takhle, a že neuhneš.'],
+    [121.4, 'Trojky, čtyřky, klidně přidej k tomu,', 'gap'],
+    [125.0, 'jestli je to hra, hraju naplno, nejdu domů.'],
+    [128.6, 'Zvládnu všechny, co pustíš mezi nás,'],
+    [132.2, 'a stejně zůstanu jen tvůj, zas a zas.'],
+    [138.3, 'Viděl jsem, že jedeme na stejný vlně,', 'gap'],
+    [141.9, 'že to jde samo, a jde to plně.'],
+    [145.5, 'Tvou divokou hlavu, co nikdo nesvázal,'],
+    [149.2, 'a stejnej směr, co nikdo z nás nenaplánoval.'],
+    [155.3, 'Tohle všechno za jednu noc, to není málo.', 'gap'],
+    [158.9, 'A to mě ještě ani neznáš. Co by se stalo,'],
+    [162.5, 'kdybys mi dala ještě jednu chvíli?'],
+    [166.1, 'Nic víc. Jen abychom si to ověřili.'],
+    [172.2, 'Pojďme se ještě jednou vidět,', 'gap'],
+    [175.8, 'ne slib, ne plán, jen chvíli navíc.'],
+    [179.4, 'Jestli ti se mnou bylo dobře, tak co víc,'],
+    [183.0, 'byla by škoda nechat to zmizet.'],
+    [189.2, 'Tak jo. Já nikam nespěchám,', 'gap'],
+    [192.8, 'ať dohraje klavír, já mu to přenechám.'],
+    [196.4, 'Když se ozveš, budu tady stát.'],
+    [200.0, 'Když ne, tak jsem to zkusil. A nebudu se ptát.']
   ];
 
   var $ = function (id) { return document.getElementById(id); };
